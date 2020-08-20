@@ -75,6 +75,8 @@ func main() {
 		fmt.Printf("\nVersion: %v\n", version)
 	} else if *helpFlag {
 		usageMessage()
+	} else if *latestFlag {
+		//usageMessage()
 	} else {
 		/* This block checks to see if the tfswitch toml file is provided in the current path.
 		 * If the .tfswitch.toml file exist, it has a higher precedence than the .tfswitchrc file
