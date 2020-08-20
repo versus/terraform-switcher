@@ -54,6 +54,7 @@ func main() {
 	custBinPath := getopt.StringLong("bin", 'b', defaultBin, "Custom binary path. For example: /Users/username/bin/terraform")
 	listAllFlag := getopt.BoolLong("list-all", 'l', "List all versions of terraform - including beta and rc")
 	versionFlag := getopt.BoolLong("version", 'v', "Displays the version of tfswitch")
+	latestFlag := getopt.BoolLong("latest", 'u', "Switch to the latest terraform version")
 	helpFlag := getopt.BoolLong("help", 'h', "Displays help message")
 	_ = versionFlag
 
