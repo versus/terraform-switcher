@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/user"
 	"runtime"
 )
 
@@ -12,7 +11,7 @@ const (
 	hashiURL       = "https://releases.hashicorp.com/terraform/"
 	installFile    = "terraform"
 	installVersion = "terraform_"
-	installPath    = "/.terraform.versions/"
+	installPath    = "/tfswitch/terraform.versions/"
 	recentFile     = "RECENT"
 )
 
@@ -49,17 +48,25 @@ func initialize() {
 
 }
 
+func getInstallLocation() string {
+
+}
+
 // getInstallLocation : get location where the terraform binary will be installed,
 // will create a directory in the home location if it does not exist
 func getInstallLocation() string {
 	/* get current user */
-	usr, errCurr := user.Current()
-	if errCurr != nil {
-		log.Fatal(errCurr)
-	}
+	// usr, errCurr := user.Current()
+	// if errCurr != nil {
+	// 	log.Fatal(errCurr)
+	// }
+
+	str, _ := os.UserConfigDir()
 
 	/* set installation location */
-	installLocation = usr.HomeDir + installPath
+	installLocation = str + installPath
+
+	fmt.Println("STRING", str)
 
 	/* Create local installation directory if it does not exist */
 	CreateDirIfNotExist(installLocation)
