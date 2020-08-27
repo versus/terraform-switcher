@@ -36,3 +36,5 @@ tfswitch*
 build-script.sh
 
 .tfswitch.toml
+
+.idea

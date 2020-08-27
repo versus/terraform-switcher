@@ -8,7 +8,7 @@ import (
 	"os/user"
 	"testing"
 
-	lib "github.com/warrensbox/terraform-switcher/lib"
+	lib "github.com/versus/terraform-switcher/lib"
 )
 
 // TestDownloadFromURL_FileNameMatch : Check expected filename exist when downloaded

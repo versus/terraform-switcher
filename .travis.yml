@@ -1,9 +1,0 @@
-language: go
-install: true
-
-go:
-  - "1.13.4"
-
-script:
-  - make test
-  - make clean

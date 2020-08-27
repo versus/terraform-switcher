@@ -19,4 +19,6 @@ require (
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/viper v1.4.0
+	github.com/versus/terraform-switcher v0.1.0 // indirect
+	github.com/zclconf/go-cty v1.1.0 // indirect
 )
