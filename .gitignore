@@ -35,6 +35,17 @@ tfswitch*
 
 build-script.sh
 
-.tfswitch.toml
 
+.tfswitch.toml
+version.tf.b
+.tfswitchrc.b
+.tfswitch.toml.b
+.terraform-version.b
 .idea
+
+.terraform-version.old
+.tfswitch.toml.old
+.tfswitchrc.old
+cmd/aaaa.go.txt
+
+
