@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/warrensbox/terraform-switcher/lib"
+	"github.com/versus/terraform-switcher/lib"
 )
 
 // TestRenameFile : Create a file, check filename exist,

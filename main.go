@@ -30,13 +30,13 @@ import (
 	// original hashicorp upstream have broken dependencies, so using fork as workaround
 	// TODO: move back to upstream
 	"github.com/kiranjthomas/terraform-config-inspect/tfconfig"
-	//	"github.com/hashicorp/terraform-config-inspect/tfconfig"
+	//"github.com/hashicorp/terraform-config-inspect/tfconfig"
 
 	"github.com/manifoldco/promptui"
 	"github.com/pborman/getopt"
 	"github.com/spf13/viper"
 
-	lib "github.com/warrensbox/terraform-switcher/lib"
+	lib "github.com/versus/terraform-switcher/lib"
 )
 
 const (
@@ -54,6 +54,7 @@ func main() {
 	custBinPath := getopt.StringLong("bin", 'b', defaultBin, "Custom binary path. For example: /Users/username/bin/terraform")
 	listAllFlag := getopt.BoolLong("list-all", 'l', "List all versions of terraform - including beta and rc")
 	versionFlag := getopt.BoolLong("version", 'v', "Displays the version of tfswitch")
+	latestFlag := getopt.BoolLong("latest", 'u', "Switch to the latest terraform version")
 	helpFlag := getopt.BoolLong("help", 'h', "Displays help message")
 	_ = versionFlag
 
@@ -74,6 +75,19 @@ func main() {
 		fmt.Printf("\nVersion: %v\n", version)
 	} else if *helpFlag {
 		usageMessage()
+	} else if *latestFlag {
+		tfversion, err := lib.GetTFLatest(hashiURL)
+		if err != nil {
+			fmt.Println("Error get latest version: ", err)
+			os.Exit(1)
+		}
+		if lib.ValidVersionFormat(tfversion) { //check if version is correct
+			lib.Install(string(tfversion), *custBinPath)
+		} else {
+			fmt.Println("Invalid terraform version format. Format should be #.#.# or #.#.#-@# where # is numbers and @ is word characters. For example, 0.11.7 and 0.11.9-beta1 are valid versions")
+			os.Exit(1)
+		}
+		//usageMessage()
 	} else {
 		/* This block checks to see if the tfswitch toml file is provided in the current path.
 		 * If the .tfswitch.toml file exist, it has a higher precedence than the .tfswitchrc file

@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/warrensbox/terraform-switcher/lib"
+	"github.com/versus/terraform-switcher/lib"
 )
 
 const (
@@ -38,6 +38,14 @@ func TestGetTFList(t *testing.T) {
 		t.Log("Write versions exist (expected)")
 	}
 
+}
+
+func TestGetTFLatest(t *testing.T) {
+	latest, err := lib.GetTFLatest(hashiURL)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	t.Log("There is latest version ", latest)
 }
 
 //TestRemoveDuplicateVersions :  test to removed duplicate
