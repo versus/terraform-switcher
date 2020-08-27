@@ -71,6 +71,10 @@ func getInstallLocation() string {
 //Install : Install the provided version in the argument
 func Install(tfversion string, binPath string) {
 
+	if runtime.GOOS == "windows" {
+		tfversion = tfversion+".exe"
+	}
+
 	if !ValidVersionFormat(tfversion) {
 		fmt.Printf("The provided terraform version format does not exist - %s. Try `tfswitch -l` to see all available versions.\n", tfversion)
 		os.Exit(1)
