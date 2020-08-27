@@ -49,7 +49,7 @@ func main() {
 	tfversion, path = cmd.GetConfigVariable()
 	//fmt.Println("tfversion=", tfversion)
 	//fmt.Println("path=",path)
-	
+
 	if *customBinPathFlag != "" {
 		path = *customBinPathFlag
 	}
