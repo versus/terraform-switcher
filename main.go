@@ -19,6 +19,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/versus/terraform-switcher/lib"
 	"io/ioutil"
 	"log"
 	"os"
@@ -36,7 +37,6 @@ import (
 	"github.com/pborman/getopt"
 	"github.com/spf13/viper"
 
-	lib "github.com/versus/terraform-switcher/lib"
 )
 
 const (
