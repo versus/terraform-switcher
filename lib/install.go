@@ -2,10 +2,13 @@ package lib
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/user"
 	"runtime"
+	"sort"
+	"strings"
 )
 
 const (
@@ -39,11 +42,8 @@ func initialize() {
 		installedBinPath = path
 	}
 
-	/* check if current symlink to terraform binary exist */
-	symlinkExist := CheckSymlink(installedBinPath)
-
 	/* remove current symlink if exist*/
-	if symlinkExist {
+	if CheckSymlink(installedBinPath) {
 		RemoveSymlink(installedBinPath)
 	}
 
@@ -68,8 +68,39 @@ func getInstallLocation() string {
 
 }
 
+func RemoveVersion(tfversion string, binPath string) bool {
+	if runtime.GOOS == "windows" {
+		tfversion = tfversion+".exe"
+	}
+	if !ValidVersionFormat(tfversion) {
+		fmt.Printf("The provided terraform version format does not exist - %s. Try `tfswitch -l` to see all available versions.\n", tfversion)
+		os.Exit(1)
+	}
+ 	//initialize path
+	installLocation = getInstallLocation() //get installation location -  this is where we will put our terraform binary file
+
+	if CheckFileExist(installLocation + installVersion + tfversion) {
+
+		/* remove current symlink if exist*/
+		if CheckSymlink(binPath) {
+			RemoveSymlink(binPath)
+		}
+
+		RemoveFiles(installLocation+installVersion+tfversion)
+		fmt.Println("File ", installLocation+installVersion+tfversion, " deleted")
+		return true
+	}
+
+	fmt.Println("File ", installLocation+installVersion+tfversion, " not found")
+	return false
+}
+
 //Install : Install the provided version in the argument
 func Install(tfversion string, binPath string) {
+
+	if runtime.GOOS == "windows" {
+		tfversion = tfversion+".exe"
+	}
 
 	if !ValidVersionFormat(tfversion) {
 		fmt.Printf("The provided terraform version format does not exist - %s. Try `tfswitch -l` to see all available versions.\n", tfversion)
@@ -91,16 +122,12 @@ func Install(tfversion string, binPath string) {
 	goarch := runtime.GOARCH
 	goos := runtime.GOOS
 
-	/* check if selected version already downloaded */
-	fileExist := CheckFileExist(installLocation + installVersion + tfversion)
 
 	/* if selected version already exist, */
-	if fileExist {
+	if CheckFileExist(installLocation + installVersion + tfversion) {
 
 		/* remove current symlink if exist*/
-		symlinkExist := CheckSymlink(binPath)
-
-		if symlinkExist {
+		if CheckSymlink(binPath) {
 			RemoveSymlink(binPath)
 		}
 
@@ -137,9 +164,8 @@ func Install(tfversion string, binPath string) {
 	RemoveFiles(installLocation + installVersion + tfversion + "_" + goos + "_" + goarch + ".zip")
 
 	/* remove current symlink if exist*/
-	symlinkExist := CheckSymlink(binPath)
 
-	if symlinkExist {
+	if CheckSymlink(binPath) {
 		RemoveSymlink(binPath)
 	}
 
@@ -192,6 +218,24 @@ func AddRecent(requestedVersion string) {
 	}
 }
 
+func GetInstalledVersions() ([]string, error) {
+	var versions []string
+	installLocation = getInstallLocation()
+	files, err := ioutil.ReadDir(installLocation)
+	if err != nil {
+		return nil, err
+	}
+	for _, file := range files {
+		if file.Name() == "RECENT" {
+			continue
+		}
+		versions = append(versions, strings.Trim(file.Name(), "terraform_"))
+	}
+	var str  sort.StringSlice = versions
+	sort.Sort(sort.Reverse(str[:]))
+	return str, nil
+}
+
 // GetRecentVersions : get recent version from file
 func GetRecentVersions() ([]string, error) {
 
@@ -199,7 +243,6 @@ func GetRecentVersions() ([]string, error) {
 
 	fileExist := CheckFileExist(installLocation + recentFile)
 	if fileExist {
-
 		lines, errRead := ReadLines(installLocation + recentFile)
 		outputRecent := []string{}
 

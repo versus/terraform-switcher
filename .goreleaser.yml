@@ -1,87 +1,79 @@
 # This is an example goreleaser.yaml file with some sane defaults.
 # Make sure to check the documentation at http://goreleaser.com
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod download
+    # you may remove this if you don't need go generate
+    - go generate ./...
+
 builds:
   - ldflags:
-    - -s -w -X "main.version={{.Env.RELEASE_VERSION}}"
+      - -s -w -X "main.version={{ .Version }}"
   - main: main.go
     binary: tfswitch
+    id: tfswitch
     goos:
+      - linux
       - windows
       - darwin
-      - linux
     goarch:
       - amd64
+
 checksum:
-  name_template: '{{ .ProjectName }}_{{.Env.RELEASE_VERSION}}_checksums.txt'
+  name_template: "{{ .ProjectName }}_checksums.txt"
+  algorithm: sha256
+
 changelog:
   sort: asc
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
-archive:
-  name_template: '{{ .ProjectName }}_{{.Env.RELEASE_VERSION}}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-  replacements:
-    darwin: darwin
-    linux: linux
-    386: 386
-    amd64: amd64
-  format_overrides:
-  - goos: windows
-    format: zip
-brew:
-  # Name of the recipe
-  # Default to project name
-  name: tfswitch
+      - '^docs:'
+      - '^test:'
 
-  # Reporitory to push the tap to.
-  github:
-    owner: warrensbox
-    name: homebrew-tap
+archives:
+  -
+    # ID of this archive.
+    # Defaults to `default`.
+    id: tfswitch
 
-  # Allows you to set a custom download strategy.
-  # Default is empty.
-  #download_strategy: GitHubPrivateRepositoryReleaseDownloadStrategy
+    # Builds reference which build instances should be archived in this archive.
+    builds:
+      - tfswitch
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format: tar.gz
 
-  # Git author used to commit to the repository.
-  # Defaults are shown.
-  commit_author:
-    name: Warren Veerasingam
-    email: warren.veerasingam@gmail.com
+    format_overrides:
+      - goos: windows
+        format: zip
 
-  # Folder inside the repository to put the formula.
-  # Default is the root folder.
-  folder: Formula
+    files:
+      - LICENSE
 
-  # Caveats for the user of your binary.
-  # Default is empty.
-  caveats: "Type 'tfswitch' on your command line and choose the terraform version that you want from the dropdown. This command currently only works on MacOs and Linux"
+brews:
+  -
+    name: tfswitch
+    ids:
+      - tfswitch
 
-  # Your app's homepage.
-  # Default is empty.
-  homepage: "https://warrensbox.github.io/terraform-switcher"
+    tap:
+      owner: versus
+      name: homebrew-tap
 
-  # Your app's description.
-  # Default is empty.
-  description: "The tfswitch command lets you switch between terraform versions."
+    commit_author:
+      name: versus
+      email: versus.dev@gmail.com
+    folder: Formula
+    caveats: "Type 'tfswitch' on your command line and choose the terraform version that you want from the dropdown. This command currently only works on MacOs and Linux"
+    homepage: "https://versus.github.io/terraform-switcher"
+    description: "The tfswitch command lets you switch between terraform versions."
+    skip_upload: false
 
-  # Setting this will prevent goreleaser to actually try to commit the updated
-  # formula - instead, the formula file will be stored on the dist folder only,
-  # leaving the responsibility of publishing it to the user.
-  # Default is false.
-  skip_upload: false
+    conflicts:
+      - terraform
 
-  # Packages that conflict with your package.
-  conflicts:
-    - terraform
+    test: |
+      system "#{bin}/tfswitch --version"
 
-  # So you can `brew test` your formula.
-  # Default is empty.
-  test: |
-    system "#{bin}/tfswitch --version"
-
-  # Custom install script for brew.
-  # Default is 'bin.install "program"'.
-  install: |
-    bin.install "tfswitch"
-
+    install: |
+      bin.install "tfswitch"

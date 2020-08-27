@@ -1,8 +1,6 @@
-[![Build Status](https://travis-ci.org/warrensbox/terraform-switcher.svg?branch=master)](https://travis-ci.org/warrensbox/terraform-switcher)
-[![Go Report Card](https://goreportcard.com/badge/github.com/warrensbox/terraform-switcher)](https://goreportcard.com/report/github.com/warrensbox/terraform-switcher)
-[![CircleCI](https://circleci.com/gh/warrensbox/terraform-switcher/tree/master.svg?style=shield&circle-token=55ddceec95ff67eb38269152282f8a7d761c79a5)](https://circleci.com/gh/warrensbox/terraform-switcher)
 
 # Terraform Switcher
+forked from [warrensbox/terraform-switcher](https://github.com/warrensbox/terraform-switcher)
 
 <img style="text-allign:center" src="https://s3.us-east-2.amazonaws.com/kepler-images/warrensbox/tfswitch/smallerlogo.png" alt="drawing" width="120" height="130"/>
 
@@ -17,15 +15,15 @@ See installation guide here: [tfswitch installation](https://warrensbox.github.i
 
 ## Installation
 
-`tfswitch` is available for MacOS and Linux based operating systems.
+`tfswitch` is available for MacOS and Linux based operating systems (Windows experemetal).
 
 ### Homebrew
 
-Installation for MacOS is the easiest with Homebrew. [If you do not have homebrew installed, click here](https://brew.sh/).
+Installation for MacOS/Linux is the easiest with Homebrew. [If you do not have homebrew installed, click here](https://brew.sh/).
 
 
 ```ruby
-brew install warrensbox/tap/tfswitch
+brew install versus/tap/tfswitch
 ```
 
 ### Linux
@@ -33,12 +31,29 @@ brew install warrensbox/tap/tfswitch
 Installation for other linux operation systems.
 
 ```sh
-curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash
+curl -L https://raw.githubusercontent.com/versus/terraform-switcher/release/install.sh | bash
 ```
 
-### Install from source
+### Build and install SNAP package 
 
-Alternatively, you can install the binary from source [here](https://github.com/warrensbox/terraform-switcher/releases)
+```bash
+snap install snapcraft --classic
+
+snap install multipass
+
+snapcraft
+
+snap install terraform-switcher_*.snap --devmode --dangerous
+
+tfswitch -v
+
+multipass stop snapcraft-tfswitch && multipass delete snapcraft-tfswitch && multipass purge
+
+```
+
+### Get binary releases or install from source
+
+Alternatively, you can get releases or install the binary from source [here](https://github.com/versus/terraform-switcher/releases)
 
 ## How to use:
 ### Use dropdown menu to select version
@@ -89,13 +104,16 @@ This is similiar to using a .tfswitchrc file, but you can specify a custom binar
 1. Create a custom binary path. Ex: `mkdir /Users/warrenveerasingam/bin` (replace warrenveerasingam with your username)
 2. Add the path to your PATH. Ex: `export PATH=$PATH:/Users/warrenveerasingam/bin` (add this to your bash profile or zsh profile)
 3. Pass -b or --bin parameter with your custom path to install terraform. Ex: `tfswitch -b /Users/warrenveerasingam/bin/terraform 0.10.8 `
-4. Optionally, you can create a `.tfswitch.toml` file in your terraform directory.
+4. Optionally, you can create a `.tfswitch.toml` file in your home directory for global settings.
 5. Your `.tfswitch.toml` file should look like this:
 ```ruby
-bin = "/Users/warrenveerasingam/bin/terraform"
+bin = "/Users/versus/bin/terraform"
 version = "0.11.3"
 ```
 4. Run `tfswitch` and it should automatically install the required terraform version in the specified binary path
+
+Alternatively, you can generate .tfswitch.toml in current directory just use `tfswitch --init ` or `tfswitch --init 0.13.2`
+
 
 ### Use .tfswitchrc file
 <img src="https://s3.us-east-2.amazonaws.com/kepler-images/warrensbox/tfswitch/tfswitch-v6.gif#1" alt="drawing" style="width: 370px;"/>
@@ -103,6 +121,11 @@ version = "0.11.3"
 1. Create a `.tfswitchrc` file containing the desired version
 2. For example, `echo "0.10.5" >> .tfswitchrc` for version 0.10.5 of terraform
 3. Run the command `tfswitch` in the same directory as your `.tfswitchrc`
+
+### Use environment variable TFSWITCH_PATH
+
+1. Create a `TFSWITCH_PATH` environment variable with your custom path to install terraform Ex: `export  TFSWITCH_PATH=/Users/versus/bin/terraform`
+2. Run the command `tfswitch` 
 
 #### *Instead of a `.tfswitchrc` file, a `.terraform-version` file may be used for compatibility with [`tfenv`](https://github.com/tfutils/tfenv#terraform-version-file) and other tools which use it*
 
@@ -160,7 +183,7 @@ cd(){
 #!/bin/bash 
 
 echo "Installing tfswitch locally"
-wget https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh 
+wget https://raw.githubusercontent.com/versus/terraform-switcher/release/install.sh 
 chmod 755 install.sh
 ./install.sh -b bin-directory
 
@@ -173,7 +196,7 @@ If you have limited permission, try:
 #!/bin/bash 
 
 echo "Installing tfswitch locally"
-wget https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh 
+wget https://raw.githubusercontent.com/versus/terraform-switcher/release/install.sh 
 chmod 755 install.sh
 ./install.sh -b bin-directory
 
@@ -199,7 +222,7 @@ jobs:
     docker:
       - image: ubuntu
 
-    working_directory: /go/src/github.com/warrensbox/terraform-switcher
+    working_directory: /go/src/github.com/versus/terraform-switcher
 
     steps:
       - checkout
@@ -212,7 +235,7 @@ jobs:
 
             echo "Installing tfswitch locally"
 
-            wget https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh 
+            wget https://raw.githubusercontent.com/versus/terraform-switcher/release/install.sh 
             chmod 755 install.sh
             ./install.sh -b bin-directory
 
@@ -225,17 +248,8 @@ jobs:
             terraform -v                    #testing version
 ```
 
-## How to contribute    
-An open source project becomes meaningful when people collaborate to improve the code.    
-Feel free to look at the code, critique and make suggestions. Lets make `tfswitch` better!   
-
-See step-by-step instructions on how to contribute here: [Contribute](https://tfswitch.warrensbox.com/How-to-Contribute/)      
-
-## Additional Info
-
-See how to *upgrade*, *uninstall*, *troubleshoot* here: [More info](https://tfswitch.warrensbox.com/Upgrade-or-Uninstall/)   
 
 
 ## Issues
 
-Please open  *issues* here: [New Issue](https://github.com/warrensbox/terraform-switcher/issues)
+Please open  *issues* here: [New Issue](https://github.com/versus/terraform-switcher/issues)

@@ -1,10 +1,10 @@
 package lib_test
 
 import (
+	"github.com/versus/terraform-switcher/lib"
 	"reflect"
 	"testing"
 
-	"github.com/warrensbox/terraform-switcher/lib"
 )
 
 // TestNewCommand : pass value and check if returned value is a pointer

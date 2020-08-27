@@ -13,6 +13,7 @@ type tfVersionList struct {
 	tflist []string
 }
 
+
 //GetTFList :  Get the list of available terraform version given the hashicorp url
 func GetTFList(hashiURL string, listAll bool) ([]string, error) {
 
@@ -52,9 +53,20 @@ func GetTFList(hashiURL string, listAll bool) ([]string, error) {
 			tfVersionList.tflist = append(tfVersionList.tflist, trimstr)
 		}
 	}
-
 	return tfVersionList.tflist, nil
 
+}
+
+//GetTFLatest :  Get the latest available terraform version given the hashicorp url
+func GetTFLatest(hashiURL string) (string, error) {
+
+	resp, err := GetTFList(hashiURL, false)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return "", err
+	}
+
+	return  resp[0], nil
 }
 
 //VersionExist : check if requested version exist

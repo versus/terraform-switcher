@@ -5,13 +5,13 @@ set -e
 usage() {
   this=$1
   cat <<EOF
-$this: download go binaries for warrensbox/tfswitch
+$this: download go binaries for versus/tfswitch
 
 Usage: $this [-b] bindir [-d] [tag]
   -b sets bindir or installation directory, Defaults to ./bin
   -d turns on debug logging
    [tag] is a tag from
-   https://github.com/warrensbox/terraform-switcher/releases
+   https://github.com/versus/terraform-switcher/releases
    If tag is missing, then the latest will be used.
 
 EOF
@@ -335,7 +335,7 @@ End of functions from https://github.com/client9/shlib
 EOF
 
 PROJECT_NAME="terraform-switcher"
-OWNER=warrensbox
+OWNER=versus
 REPO="terraform-switcher"
 BINARY=tfswitch
 FORMAT=tar.gz
@@ -370,7 +370,7 @@ log_info "found version: ${VERSION} for ${TAG}/${OS}/${ARCH}"
 NAME=${PROJECT_NAME}_${VERSION}_${OS}_${ARCH}
 TARBALL=${NAME}.${FORMAT}
 TARBALL_URL=${GITHUB_DOWNLOAD}/${TAG}/${TARBALL}
-CHECKSUM=${PROJECT_NAME}_${VERSION}_checksums.txt
+CHECKSUM=${PROJECT_NAME}_checksums.txt
 CHECKSUM_URL=${GITHUB_DOWNLOAD}/${TAG}/${CHECKSUM}
 
 
