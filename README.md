@@ -23,7 +23,7 @@ Installation for MacOS is the easiest with Homebrew. [If you do not have homebre
 
 
 ```ruby
-brew install warrensbox/tap/tfswitch
+brew install versus/tap/tfswitch
 ```
 
 ### Linux
