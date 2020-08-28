@@ -56,8 +56,6 @@ archives:
 
 brews:
   -
-    # Name template of the recipe
-    # Default to project name
     name: tfswitch
     ids:
       - tfswitch
@@ -68,36 +66,13 @@ brews:
 
     #  token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
 
-
-
-    # Git author used to commit to the repository.
-    # Defaults are shown.
     commit_author:
       name: versus
       email: versus.dev@gmail.com
-
-    # Folder inside the repository to put the formula.
-    # Default is the root folder.
     folder: Formula
-
-    # Caveats for the user of your binary.
-    # Default is empty.
     caveats: "Type 'tfswitch' on your command line and choose the terraform version that you want from the dropdown. This command currently only works on MacOs and Linux"
-
-    # Your app's homepage.
-    # Default is empty.
-    homepage: "https://warrensbox.github.io/terraform-switcher"
-
-    # Your app's description.
-    # Default is empty.
+    homepage: "https://versus.github.io/terraform-switcher"
     description: "The tfswitch command lets you switch between terraform versions."
-
-    # Setting this will prevent goreleaser to actually try to commit the updated
-    # formula - instead, the formula file will be stored on the dist folder only,
-    # leaving the responsibility of publishing it to the user.
-    # If set to auto, the release will not be uploaded to the homebrew tap
-    # in case there is an indicator for prerelease in the tag e.g. v1.0.0-rc1
-    # Default is false.
     skip_upload: false
 
 
@@ -108,7 +83,6 @@ brews:
 
     test: |
       system "#{bin}/tfswitch --version"
-      ...
 
     # Custom install script for brew.
     # Default is 'bin.install "program"'.
