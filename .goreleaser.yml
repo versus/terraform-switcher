@@ -20,7 +20,6 @@ builds:
     goarch:
       - amd64
 
-
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
   algorithm: sha256
@@ -31,9 +30,6 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
-
-
-
 
 archives:
   -
@@ -64,8 +60,6 @@ brews:
       owner: versus
       name: homebrew-tap
 
-    #  token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-
     commit_author:
       name: versus
       email: versus.dev@gmail.com
@@ -75,16 +69,11 @@ brews:
     description: "The tfswitch command lets you switch between terraform versions."
     skip_upload: false
 
-
-
-    # Packages that conflict with your package.
     conflicts:
       - terraform
 
     test: |
       system "#{bin}/tfswitch --version"
 
-    # Custom install script for brew.
-    # Default is 'bin.install "program"'.
     install: |
       bin.install "tfswitch"
