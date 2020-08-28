@@ -37,7 +37,7 @@ archives:
   -
     # ID of this archive.
     # Defaults to `default`.
-    id: tfswitch-archive
+    id: tfswitch
 
     # Builds reference which build instances should be archived in this archive.
     builds:
@@ -95,11 +95,8 @@ brews:
     # Name template of the recipe
     # Default to project name
     name: tfswitch
-
-    # IDs of the archives to use.
-    # Defaults to all.
     ids:
-      - tfswitch-archive
+      - tfswitch
 
     tap:
       owner: versus
@@ -137,7 +134,7 @@ brews:
     # If set to auto, the release will not be uploaded to the homebrew tap
     # in case there is an indicator for prerelease in the tag e.g. v1.0.0-rc1
     # Default is false.
-    skip_upload: false
+    skip_upload: true
 
 
 
@@ -145,9 +142,6 @@ brews:
     conflicts:
       - terraform
 
-
-    # So you can `brew test` your formula.
-    # Default is empty.
     test: |
       system "#{bin}/tfswitch --version"
       ...
