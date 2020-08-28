@@ -21,11 +21,12 @@ import (
 
 const (
 	defaultPath   = "/usr/local/bin/terraform" //default bin installation dir
-	version = "terraform-switcher 0.9.1\n\n"
+	version = "terraform-switcher 0.9.2\n\n"
 )
 
 func main() {
 	var path, tfversion string
+	var isRemoveAction  = false
 
 	customBinPathFlag := getopt.StringLong("bin", 'b', "", "Custom binary path. For example: /Users/username/bin/terraform")
 	listReleaseFlag := getopt.BoolLong("list", 'r', "List release versions of terraform")
@@ -33,6 +34,7 @@ func main() {
 	programVersionFlag := getopt.BoolLong("version", 'v', "Displays the version of tfswitch")
 	latestVersionFlag := getopt.BoolLong("latest", 'u', "Switch to the latest terraform version")
 	helpFlag := getopt.BoolLong("help", 'h', "Displays help message")
+	removeFlag := getopt.BoolLong("delete", 'd', "Remove terraform version from filesystem")
 
 	getopt.Parse()
 	args := getopt.Args()
@@ -47,8 +49,11 @@ func main() {
 	}
 
 	tfversion, path = cmd.GetConfigVariable()
-	//fmt.Println("tfversion=", tfversion)
-	//fmt.Println("path=",path)
+
+	envPath := os.Getenv("TFSWITCH_PATH")
+	if envPath != "" {
+		path = envPath
+	}
 
 	if *customBinPathFlag != "" {
 		path = *customBinPathFlag
@@ -57,6 +62,9 @@ func main() {
 	if path == "" {
 		path = defaultPath
 	}
+
+	//fmt.Println("tfversion=", tfversion)
+	//fmt.Println("path=",path)
 
 	if *listReleaseFlag {
 		cmd.Install(false, path)
@@ -67,18 +75,32 @@ func main() {
 		os.Exit(0)
 	}
 
+	if *removeFlag {
+		isRemoveAction = true
+	}
+
 	if *latestVersionFlag {
 		cmd.InstallLatest(path)
 	}
 
 	if len(args) == 0 {
+		if isRemoveAction {
+			cmd.Remove(path)
+			os.Exit(0)
+		}
 		if tfversion != ""  &&  path != ""{
 			cmd.InstallSelectVersion(tfversion, path)
+			os.Exit(0)
 		} else {
+
 			cmd.Install(false, path)
 			os.Exit(0)
 		}
 	} else 	if len(args) == 1 {
+		if isRemoveAction {
+			cmd.RemoveSelectVersion(args[0], path)
+			os.Exit(0)
+		}
 		cmd.InstallSelectVersion(args[0], path)
 	} else if len(args) > 1 {
 		cmd.UsageMessage()
