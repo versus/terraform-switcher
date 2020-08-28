@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/warrensbox/terraform-switcher.svg?branch=master)](https://travis-ci.org/warrensbox/terraform-switcher)
-[![Go Report Card](https://goreportcard.com/badge/github.com/warrensbox/terraform-switcher)](https://goreportcard.com/report/github.com/warrensbox/terraform-switcher)
-[![CircleCI](https://circleci.com/gh/warrensbox/terraform-switcher/tree/master.svg?style=shield&circle-token=55ddceec95ff67eb38269152282f8a7d761c79a5)](https://circleci.com/gh/warrensbox/terraform-switcher)
 
 # Terraform Switcher
 
@@ -19,7 +16,7 @@ Once installed, simply select the version you require from the dropdown and star
 
 ### Homebrew
 
-Installation for MacOS is the easiest with Homebrew. [If you do not have homebrew installed, click here](https://brew.sh/).
+Installation for MacOS/Linux is the easiest with Homebrew. [If you do not have homebrew installed, click here](https://brew.sh/).
 
 
 ```ruby
@@ -36,7 +33,7 @@ curl -L https://raw.githubusercontent.com/versus/terraform-switcher/release/inst
 
 ### Install from source
 
-Alternatively, you can install the binary from source [here](https://github.com/warrensbox/terraform-switcher/releases)
+Alternatively, you can install the binary from source [here](https://github.com/versus/terraform-switcher/releases)
 
 ## How to use:
 ### Use dropdown menu to select version
@@ -197,7 +194,7 @@ jobs:
     docker:
       - image: ubuntu
 
-    working_directory: /go/src/github.com/warrensbox/terraform-switcher
+    working_directory: /go/src/github.com/versus/terraform-switcher
 
     steps:
       - checkout
@@ -223,17 +220,6 @@ jobs:
             terraform -v                    #testing version
 ```
 
-## How to contribute    
-An open source project becomes meaningful when people collaborate to improve the code.    
-Feel free to look at the code, critique and make suggestions. Lets make `tfswitch` better!   
-
-See step-by-step instructions on how to contribute here: [Contribute](https://tfswitch.warrensbox.com/How-to-Contribute/)      
-
-## Additional Info
-
-See how to *upgrade*, *uninstall*, *troubleshoot* here: [More info](https://tfswitch.warrensbox.com/Upgrade-or-Uninstall/)   
-
-
 ## Issues
 
-Please open  *issues* here: [New Issue](https://github.com/warrensbox/terraform-switcher/issues)
+Please open  *issues* here: [New Issue](https://github.com/versus/terraform-switcher/issues)
