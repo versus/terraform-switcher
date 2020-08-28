@@ -12,7 +12,7 @@ Once installed, simply select the version you require from the dropdown and star
 
 ## Installation
 
-`tfswitch` is available for MacOS and Linux based operating systems.
+`tfswitch` is available for MacOS and Linux based operating systems (Windows experemetal).
 
 ### Homebrew
 
@@ -31,9 +31,9 @@ Installation for other linux operation systems.
 curl -L https://raw.githubusercontent.com/versus/terraform-switcher/release/install.sh | bash
 ```
 
-### Install from source
+### Get binary releases or install from source
 
-Alternatively, you can install the binary from source [here](https://github.com/versus/terraform-switcher/releases)
+Alternatively, you can get releases or  install the binary from source [here](https://github.com/versus/terraform-switcher/releases)
 
 ## How to use:
 ### Use dropdown menu to select version
@@ -84,10 +84,10 @@ This is similiar to using a .tfswitchrc file, but you can specify a custom binar
 1. Create a custom binary path. Ex: `mkdir /Users/warrenveerasingam/bin` (replace warrenveerasingam with your username)
 2. Add the path to your PATH. Ex: `export PATH=$PATH:/Users/warrenveerasingam/bin` (add this to your bash profile or zsh profile)
 3. Pass -b or --bin parameter with your custom path to install terraform. Ex: `tfswitch -b /Users/warrenveerasingam/bin/terraform 0.10.8 `
-4. Optionally, you can create a `.tfswitch.toml` file in your terraform directory.
+4. Optionally, you can create a `.tfswitch.toml` file in your home directory for global settings.
 5. Your `.tfswitch.toml` file should look like this:
 ```ruby
-bin = "/Users/warrenveerasingam/bin/terraform"
+bin = "/Users/versus/bin/terraform"
 version = "0.11.3"
 ```
 4. Run `tfswitch` and it should automatically install the required terraform version in the specified binary path
@@ -98,6 +98,11 @@ version = "0.11.3"
 1. Create a `.tfswitchrc` file containing the desired version
 2. For example, `echo "0.10.5" >> .tfswitchrc` for version 0.10.5 of terraform
 3. Run the command `tfswitch` in the same directory as your `.tfswitchrc`
+
+### Use environment variable TFSWITCH_PATH
+
+1. Create a `TFSWITCH_PATH` environment variable with your custom path to install terraform Ex: `export  TFSWITCH_PATH=/Users/versus/bin/terraform`
+2. Run the command `tfswitch` 
 
 #### *Instead of a `.tfswitchrc` file, a `.terraform-version` file may be used for compatibility with [`tfenv`](https://github.com/tfutils/tfenv#terraform-version-file) and other tools which use it*
 
