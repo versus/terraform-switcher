@@ -63,7 +63,6 @@ func InstallSelectVersion(tfversion string, path string)  {
 			lib.Install(string(tfversion), path)
 		} else {
 			fmt.Println(invalidVersion)
-
 			os.Exit(1)
 		}
 }
