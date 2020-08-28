@@ -31,7 +31,7 @@ brew install warrensbox/tap/tfswitch
 Installation for other linux operation systems.
 
 ```sh
-curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash
+curl -L https://raw.githubusercontent.com/versus/terraform-switcher/release/install.sh | bash
 ```
 
 ### Install from source
@@ -158,7 +158,7 @@ cd(){
 #!/bin/bash 
 
 echo "Installing tfswitch locally"
-wget https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh 
+wget https://raw.githubusercontent.com/versus/terraform-switcher/release/install.sh 
 chmod 755 install.sh
 ./install.sh -b bin-directory
 
@@ -171,7 +171,7 @@ If you have limited permission, try:
 #!/bin/bash 
 
 echo "Installing tfswitch locally"
-wget https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh 
+wget https://raw.githubusercontent.com/versus/terraform-switcher/release/install.sh 
 chmod 755 install.sh
 ./install.sh -b bin-directory
 
@@ -210,7 +210,7 @@ jobs:
 
             echo "Installing tfswitch locally"
 
-            wget https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh 
+            wget https://raw.githubusercontent.com/versus/terraform-switcher/release/install.sh 
             chmod 755 install.sh
             ./install.sh -b bin-directory
 
