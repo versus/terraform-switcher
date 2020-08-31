@@ -14,19 +14,20 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/pborman/getopt"
 	"github.com/versus/terraform-switcher/cmd"
-	"os"
 )
 
 const (
-	defaultPath   = "/usr/local/bin/terraform" //default bin installation dir
-	version = "terraform-switcher 0.9.12\n\n"
+	defaultPath = "/usr/local/bin/terraform" //default bin installation dir
+	version     = "terraform-switcher 0.9.14\n\n"
 )
 
 func main() {
 	var path, tfversion string
-	var isRemoveAction  = false
+	var isRemoveAction = false
 
 	customBinPathFlag := getopt.StringLong("bin", 'b', "", "Custom binary path. For example: /Users/username/bin/terraform")
 	listReleaseFlag := getopt.BoolLong("list", 'r', "List release versions of terraform")
@@ -88,7 +89,7 @@ func main() {
 			cmd.Remove(path)
 			os.Exit(0)
 		}
-		if tfversion != ""  &&  path != ""{
+		if tfversion != "" && path != "" {
 			cmd.InstallSelectVersion(tfversion, path)
 			os.Exit(0)
 		} else {
@@ -96,7 +97,7 @@ func main() {
 			cmd.Install(false, path)
 			os.Exit(0)
 		}
-	} else 	if len(args) == 1 {
+	} else if len(args) == 1 {
 		if isRemoveAction {
 			cmd.RemoveSelectVersion(args[0], path)
 			os.Exit(0)
