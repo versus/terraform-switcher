@@ -1,6 +1,6 @@
 EXE  := tfswitch
 PKG  := github.com/versus/terraform-switcher
-VER := 0.9.11
+VER := 0.9.12
 PATH := build:$(PATH)
 GOOS ?= $(shell go env GOOS)
 GOARCH ?= $(shell go env GOARCH)
