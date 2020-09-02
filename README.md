@@ -225,6 +225,24 @@ jobs:
             terraform -v                    #testing version
 ```
 
+## Build SNAP package ##
+
+```bash
+snap install snapcraft --classic
+
+snap install multipass
+
+snapcraft
+
+snap install tfswitch_*.snap --devmode --dangerous
+
+tfswitch -v
+
+multipass stop snapcraft-tfswitch && multipass delete snapcraft-tfswitch && multipass purge
+
+
+```
+
 ## Issues
 
 Please open  *issues* here: [New Issue](https://github.com/versus/terraform-switcher/issues)
