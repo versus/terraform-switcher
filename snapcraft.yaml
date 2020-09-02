@@ -14,7 +14,7 @@ base: core18
 
 grade: stable
 confinement: strict
-license: MPL-2.0
+
 
 apps:
   tfswitch:
@@ -26,19 +26,14 @@ apps:
       
 parts:
   tfswitch:
-    source: https://github.com/versus/terraform-switcher.git
+    source: .
     plugin: go
     go-importpath: github.com/versus/terraform-switcher
     build-packages:
       - gcc-multilib
     go-buildtags:
       - tfswitch
-    override-pull: |
-      snapcraftctl pull
-      last_committed_tag="$(git tag | sort | tail -1)"
-      snapcraftctl set-version `echo ${last_committed_tag} | sed "s/v//g"`
     override-build: 
-      last_committed_tag="$(git tag | sort | tail -1)"
-      go build -ldflags "-X main.version=$last_committed_tag" -o ../install/bin/tfswitch
+      go build  -o ../install/bin/tfswitch
 
 
