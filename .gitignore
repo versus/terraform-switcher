@@ -48,4 +48,4 @@ version.tf.b
 .tfswitchrc.old
 cmd/aaaa.go.txt
 
-
+*.snap
