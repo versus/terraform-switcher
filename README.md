@@ -31,9 +31,26 @@ Installation for other linux operation systems.
 curl -L https://raw.githubusercontent.com/versus/terraform-switcher/release/install.sh | bash
 ```
 
+### Build and install SNAP package 
+
+```bash
+snap install snapcraft --classic
+
+snap install multipass
+
+snapcraft
+
+snap install terraform-switcher_*.snap --devmode --dangerous
+
+tfswitch -v
+
+multipass stop snapcraft-tfswitch && multipass delete snapcraft-tfswitch && multipass purge
+
+```
+
 ### Get binary releases or install from source
 
-Alternatively, you can get releases or  install the binary from source [here](https://github.com/versus/terraform-switcher/releases)
+Alternatively, you can get releases or install the binary from source [here](https://github.com/versus/terraform-switcher/releases)
 
 ## How to use:
 ### Use dropdown menu to select version
@@ -91,6 +108,9 @@ bin = "/Users/versus/bin/terraform"
 version = "0.11.3"
 ```
 4. Run `tfswitch` and it should automatically install the required terraform version in the specified binary path
+
+Alternatively, you can generate .tfswitch.toml in current directory just use `tfswitch --init ` or `tfswitch --init 0.13.2`
+
 
 ### Use .tfswitchrc file
 <img src="https://s3.us-east-2.amazonaws.com/kepler-images/warrensbox/tfswitch/tfswitch-v6.gif#1" alt="drawing" style="width: 370px;"/>
@@ -225,23 +245,7 @@ jobs:
             terraform -v                    #testing version
 ```
 
-## Build SNAP package ##
 
-```bash
-snap install snapcraft --classic
-
-snap install multipass
-
-snapcraft
-
-snap install tfswitch_*.snap --devmode --dangerous
-
-tfswitch -v
-
-multipass stop snapcraft-tfswitch && multipass delete snapcraft-tfswitch && multipass purge
-
-
-```
 
 ## Issues
 
