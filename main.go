@@ -22,7 +22,7 @@ import (
 
 const (
 	defaultPath = "/usr/local/bin/terraform" //default bin installation dir
-	version     = "terraform-switcher 0.10.1\n\n"
+	version     = "terraform-switcher 0.10.2\n\n"
 )
 
 func main() {
