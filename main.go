@@ -22,12 +22,11 @@ import (
 
 const (
 	defaultPath = "/usr/local/bin/terraform" //default bin installation dir
-	version     = "terraform-switcher 0.9.14\n\n"
+	version     = "terraform-switcher 0.10.1\n\n"
 )
 
 func main() {
 	var path, tfversion string
-	var isRemoveAction = false
 
 	customBinPathFlag := getopt.StringLong("bin", 'b', "", "Custom binary path. For example: /Users/username/bin/terraform")
 	listReleaseFlag := getopt.BoolLong("list", 'r', "List release versions of terraform")
@@ -35,18 +34,19 @@ func main() {
 	programVersionFlag := getopt.BoolLong("version", 'v', "Displays the version of tfswitch")
 	latestVersionFlag := getopt.BoolLong("latest", 'u', "Switch to the latest terraform version")
 	helpFlag := getopt.BoolLong("help", 'h', "Displays help message")
+	initFlag := getopt.BoolLong("init", 'i', "Generate .tfswitch.toml in current directory with current version terraform")
 	removeFlag := getopt.BoolLong("delete", 'd', "Remove terraform version from filesystem")
 
 	getopt.Parse()
 	args := getopt.Args()
 
+	if len(args) > 1 || *helpFlag{
+		cmd.UsageMessage()
+	}
+
 	fmt.Printf(version)
 	if *programVersionFlag {
 		os.Exit(0)
-	}
-
-	if *helpFlag {
-		cmd.UsageMessage()
 	}
 
 	tfversion, path = cmd.GetConfigVariable()
@@ -67,17 +67,37 @@ func main() {
 	//fmt.Println("tfversion=", tfversion)
 	//fmt.Println("path=",path)
 
+
+	if *removeFlag {
+		if len(args) == 1{
+			cmd.RemoveSelectVersion(args[0], path)
+			os.Exit(0)
+		} else {
+			cmd.Remove(path)
+		}
+	}
+
+	if *initFlag {
+		if len(args) == 1 {
+			cmd.InitConfigVersion(args[0], path)
+		} else {
+			if *latestVersionFlag {
+				cmd.InitConfigLatestVersion(path)
+			}
+			if *listAllFlag {
+				cmd.InitConfig(true, path)
+			} else {
+				cmd.InitConfig(false, path)
+			}
+		}
+	}
+
 	if *listReleaseFlag {
 		cmd.Install(false, path)
 	}
 
 	if *listAllFlag {
 		cmd.Install(true, path)
-		os.Exit(0)
-	}
-
-	if *removeFlag {
-		isRemoveAction = true
 	}
 
 	if *latestVersionFlag {
@@ -85,26 +105,15 @@ func main() {
 	}
 
 	if len(args) == 0 {
-		if isRemoveAction {
-			cmd.Remove(path)
-			os.Exit(0)
-		}
 		if tfversion != "" && path != "" {
 			cmd.InstallSelectVersion(tfversion, path)
-			os.Exit(0)
 		} else {
-
 			cmd.Install(false, path)
-			os.Exit(0)
 		}
-	} else if len(args) == 1 {
-		if isRemoveAction {
-			cmd.RemoveSelectVersion(args[0], path)
-			os.Exit(0)
-		}
+	}
+
+	if len(args) == 1 {
 		cmd.InstallSelectVersion(args[0], path)
-	} else if len(args) > 1 {
-		cmd.UsageMessage()
 	}
 
 }
