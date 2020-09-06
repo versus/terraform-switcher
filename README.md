@@ -34,6 +34,7 @@ curl -L https://raw.githubusercontent.com/versus/terraform-switcher/release/inst
 
 ### Build and install SNAP package 
 
+
 ```bash
 snap install snapcraft --classic
 
@@ -48,6 +49,7 @@ tfswitch -v
 multipass stop snapcraft-tfswitch && multipass delete snapcraft-tfswitch && multipass purge
 
 ```
+
 
 ### Get binary releases or install from source
 
