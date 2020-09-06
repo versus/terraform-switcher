@@ -11,8 +11,6 @@ If you do not have a particular version of terraform installed, `tfswitch` will 
 The installation is minimal and easy.
 Once installed, simply select the version you require from the dropdown and start using terraform.
 
-See installation guide here: [tfswitch installation](https://warrensbox.github.io/terraform-switcher/)
-
 ## Installation
 
 `tfswitch` is available for MacOS and Linux based operating systems (Windows experemetal).
@@ -36,6 +34,7 @@ curl -L https://raw.githubusercontent.com/versus/terraform-switcher/release/inst
 
 ### Build and install SNAP package 
 
+
 ```bash
 snap install snapcraft --classic
 
@@ -50,6 +49,7 @@ tfswitch -v
 multipass stop snapcraft-tfswitch && multipass delete snapcraft-tfswitch && multipass purge
 
 ```
+
 
 ### Get binary releases or install from source
 
