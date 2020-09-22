@@ -22,8 +22,9 @@ import (
 
 const (
 	defaultPath = "/usr/local/bin/terraform" //default bin installation dir
-	version     = "terraform-switcher 0.10.2\n\n"
 )
+
+var version string
 
 func main() {
 	var path, tfversion string
@@ -44,7 +45,7 @@ func main() {
 		cmd.UsageMessage()
 	}
 
-	fmt.Printf(version)
+	fmt.Printf("terraform-switcher %s \n\n" ,version)
 	if *programVersionFlag {
 		os.Exit(0)
 	}
