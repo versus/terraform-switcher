@@ -10,6 +10,12 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
+ifneq (,$(wildcard ./version))
+    include version
+    export
+endif
+
+
 $(EXE): go.mod *.go lib/*.go
 	go build -v -ldflags "-X main.version=$(VER)" -o ./dist/$@ $(PKG)
 
@@ -36,6 +42,5 @@ docs:
 .PHONY: gorelease
 gorelease:
 	rm -f ./dist/$(EXE) ./dist/$(EXE)-*-*-*
-
 	goreleaser
 

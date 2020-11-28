@@ -248,7 +248,50 @@ jobs:
             terraform -v                    #testing version
 ```
 
+### Adds two new flags:
 
+ - no-symlink (n)
+ Makes tfswitch detect and install a version only, without creating a permanent symlink to it. This allows tfswitch to be used as a helper when dynamically switching Terraform versions in environments where multiple tasks run with different versions in parallel, such as CI/CD agents.
+
+ - quiet (q)
+Makes tfswitch switch to a version if it's detected or specified as an argument, but prevents it from prompting the user for input if none is found or provided. This makes tfswitch more automation friendly.
+
+#### Example use case on a CI/CD agent
+An agent host is scheduled to run multiple Terraform Plan/Apply tasks simultaneously from different repositories, which each contain different Terraform configurations, using different versions of Terraform.
+
+With a regular symlink approach, they would have to be queued and run synchronously, as a version switch would have to be made between each run.
+
+However, if the terraform binary (or symlink) is replaced with a script (example below) that catches the arguments sent to terraform, performs a tfswitch using both the no-symlink and quiet flags, then catches the output from tfswitch and uses the desired binary to run the specific task, this can be done dynamically with each run, in parallel.
+
+This utilizes tfswitch's brilliant ability to detect and install the required version, while allowing concurrency.
+
+Example PoC script
+
+```sh
+#!/bin/bash
+
+TF_DEFAULT_VERSION=0.13.2
+TF_BIN_LOCATION=~/.terraform.versions
+
+TF_SWITCH=`tfswitch-test -nq`
+TF_DETECTED_VERSION=`echo "$TF_SWITCH" | awk -F '\"|\"' '{print $2}' | grep "\S"`
+
+echo "$TF_SWITCH"
+
+if [ "$TF_DETECTED_VERSION" == "" ]; then
+    TF_DETECTED_VERSION=$TF_DEFAULT_VERSION
+fi
+
+TF_BIN="$TF_BIN_LOCATION/terraform_$TF_DETECTED_VERSION"
+
+echo "Using version: $TF_DETECTED_VERSION"
+echo ""
+
+$TF_BIN "$@"
+```
+Suggestions and improvements are welcome.
+
+-Sindre(c) https://github.com/sindrel
 
 ## Issues
 
