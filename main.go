@@ -36,6 +36,8 @@ func main() {
 	helpFlag := getopt.BoolLong("help", 'h', "Displays help message")
 	initFlag := getopt.BoolLong("init", 'i', "Generate .tfswitch.toml in current directory with current version terraform")
 	removeFlag := getopt.BoolLong("delete", 'd', "Remove terraform version from filesystem")
+	noSymlinkFlag := getopt.BoolLong("no-symlink", 'n', "Skip symlink creation")
+	noPromptFlag := getopt.BoolLong("quiet", 'q', "Only switch if version is detected or specified")
 
 	getopt.Parse()
 	args := getopt.Args()
@@ -64,6 +66,11 @@ func main() {
 		path = defaultPath
 	}
 
+	createSymlink := true
+	if *noSymlinkFlag {
+		createSymlink = false
+	}
+
 	//fmt.Println("tfversion=", tfversion)
 	//fmt.Println("path=",path)
 
@@ -79,41 +86,44 @@ func main() {
 
 	if *initFlag {
 		if len(args) == 1 {
-			cmd.InitConfigVersion(args[0], path)
+			cmd.InitConfigVersion(args[0], path, createSymlink)
 		} else {
 			if *latestVersionFlag {
-				cmd.InitConfigLatestVersion(path)
+				cmd.InitConfigLatestVersion(path, createSymlink)
 			}
 			if *listAllFlag {
-				cmd.InitConfig(true, path)
+				cmd.InitConfig(true, path, createSymlink)
 			} else {
-				cmd.InitConfig(false, path)
+				cmd.InitConfig(false, path, createSymlink)
 			}
 		}
 	}
 
 	if *listReleaseFlag {
-		cmd.Install(false, path)
+		cmd.Install(false, path, createSymlink)
 	}
 
 	if *listAllFlag {
-		cmd.Install(true, path)
+		cmd.Install(true, path, createSymlink)
 	}
 
 	if *latestVersionFlag {
-		cmd.InstallLatest(path)
+		cmd.InstallLatest(path, createSymlink)
 	}
 
 	if len(args) == 0 {
 		if tfversion != "" && path != "" {
-			cmd.InstallSelectVersion(tfversion, path)
+			cmd.InstallSelectVersion(tfversion, path, createSymlink)
+		} else if *noPromptFlag {
+			fmt.Println("No terraform version detected")
+			os.Exit(0)
 		} else {
-			cmd.Install(false, path)
+			cmd.Install(false, path, createSymlink)
 		}
 	}
 
 	if len(args) == 1 {
-		cmd.InstallSelectVersion(args[0], path)
+		cmd.InstallSelectVersion(args[0], path, createSymlink)
 	}
 
 }

@@ -49,3 +49,4 @@ version.tf.b
 cmd/aaaa.go.txt
 
 *.snap
+.github_token

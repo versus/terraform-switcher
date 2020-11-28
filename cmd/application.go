@@ -19,7 +19,7 @@ const (
 /* installOption : displays & installs tf version */
 /* listAll = true - all versions including beta and rc will be displayed */
 /* listAll = false - only official stable release are displayed */
-func Install(listAll bool, path string) {
+func Install(listAll bool, path string, createSymlink bool) {
 
 	tflist, _ := lib.GetTFList(hashiURL, listAll) //get list of versions
 	recentVersions, _ := lib.GetRecentVersions()  //get recent versions from RECENT file
@@ -40,27 +40,27 @@ func Install(listAll bool, path string) {
 		os.Exit(1)
 	}
 
-	lib.Install(tfversion, path)
+	lib.Install(tfversion, path, createSymlink)
 	os.Exit(0)
 }
 
-func InstallLatest(path string)  {
+func InstallLatest(path string, createSymlink bool)  {
 	tfversion, err := lib.GetTFLatest(hashiURL)
 	if err != nil {
 		fmt.Println("Error get latest version: ", err)
 		os.Exit(1)
 	}
 	if lib.ValidVersionFormat(tfversion) { //check if version is correct
-		lib.Install(string(tfversion), path)
+		lib.Install(string(tfversion), path, createSymlink)
 	} else {
 		fmt.Println(invalidVersion)
 		os.Exit(1)
 	}
 }
 
-func InstallSelectVersion(tfversion string, path string)  {
+func InstallSelectVersion(tfversion string, path string, createSymlink bool)  {
 		if lib.ValidVersionFormat(tfversion) { //check if version is correct
-			lib.Install(string(tfversion), path)
+			lib.Install(string(tfversion), path, createSymlink)
 		} else {
 			fmt.Println(invalidVersion)
 			os.Exit(1)

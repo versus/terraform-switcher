@@ -1,6 +1,6 @@
 EXE  := tfswitch
 PKG  := github.com/versus/terraform-switcher
-VER := 0.10.2
+VER := 0.11.1
 PATH := build:$(PATH)
 GOOS ?= $(shell go env GOOS)
 GOARCH ?= $(shell go env GOARCH)
@@ -11,7 +11,7 @@ $(EXE): go.mod *.go lib/*.go
 .PHONY: release
 release: $(EXE) darwin linux
 
-.PHONY: darwin linux 
+.PHONY: darwin linux
 darwin linux:
 	GOOS=$@ go build -ldflags "-X main.version=$(VER)" -o ./dist/$(EXE)-$(VER)-$@-$(GOARCH) $(PKG)
 

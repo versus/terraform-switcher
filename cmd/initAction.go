@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func InitConfig(listAll bool, path string)  {
+func InitConfig(listAll bool, path string, createSymlink bool)  {
 	tflist, _ := lib.GetTFList(hashiURL, listAll) //get list of versions
 	recentVersions, _ := lib.GetRecentVersions()  //get recent versions from RECENT file
 	tflist = append(recentVersions, tflist...)    //append recent versions to the top of the list
@@ -29,20 +29,20 @@ func InitConfig(listAll bool, path string)  {
 		os.Exit(1)
 	}
 
-	InitConfigVersion(tfversion, path)
-	lib.Install(tfversion, path)
+	InitConfigVersion(tfversion, path, createSymlink)
+	lib.Install(tfversion, path, createSymlink)
 	os.Exit(0)
 }
 
-func InitConfigLatestVersion(path string) {
+func InitConfigLatestVersion(path string, createSymlink bool) {
 	tfversion, err := lib.GetTFLatest(hashiURL)
 	if err != nil {
 		fmt.Println("Error get latest version: ", err)
 		os.Exit(1)
 	}
 	if lib.ValidVersionFormat(tfversion) { //check if version is correct
-		InitConfigVersion(tfversion, path)
-		lib.Install(tfversion, path)
+		InitConfigVersion(tfversion, path, createSymlink)
+		lib.Install(tfversion, path, createSymlink)
 		os.Exit(0)
 	} else {
 		fmt.Println(invalidVersion)
@@ -50,7 +50,7 @@ func InitConfigLatestVersion(path string) {
 	}
 }
 
-func InitConfigVersion(tfversion string, path string) {
+func InitConfigVersion(tfversion string, path string, createSymlink bool) {
 	// generate file in current directory
 	val := "bin = \"" + path + "\"\n"
 	val += "version = \"" + tfversion  +"\"\n"
@@ -71,6 +71,6 @@ func InitConfigVersion(tfversion string, path string) {
 		os.Exit(1)
 	}
 	fmt.Println("Writting configuration to  " + pwd + "/.tfswitch.toml\n")
-	lib.Install(tfversion, path)
+	lib.Install(tfversion, path, createSymlink)
 	os.Exit(0)
 }
