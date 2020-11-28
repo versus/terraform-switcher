@@ -5,6 +5,11 @@ PATH := build:$(PATH)
 GOOS ?= $(shell go env GOOS)
 GOARCH ?= $(shell go env GOARCH)
 
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
+
 $(EXE): go.mod *.go lib/*.go
 	go build -v -ldflags "-X main.version=$(VER)" -o ./dist/$@ $(PKG)
 
@@ -27,4 +32,10 @@ test: $(EXE)
 .PHONY: docs
 docs:
 	cd docs; bundle install --path vendor/bundler; bundle exec jekyll build -c _config.yml; cd ..
+
+.PHONY: gorelease
+gorelease:
+	rm -f ./dist/$(EXE) ./dist/$(EXE)-*-*-*
+
+	goreleaser
 
