@@ -1,14 +1,16 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/Masterminds/semver"
-	"github.com/versus/terraform-switcher/lib"
 	"github.com/kiranjthomas/terraform-config-inspect/tfconfig"
+	"github.com/spf13/viper"
+	"github.com/versus/terraform-switcher/lib"
 	"io/ioutil"
 	"log"
 	"os"
-	"github.com/spf13/viper"
+	"os/exec"
 	"os/user"
 	"sort"
 	"strings"
@@ -26,13 +28,33 @@ func GetConfigVariable() (string, string) {
 	if exist == true {
 		if path == "" {
 			if exist, _, p := checkHomeDirToml(); exist == true {
-				 return tfversion, p
+				return tfversion, p
 			}
 			return tfversion, defaultBin
 		}
 		return tfversion, path
+	} else {
+		var err error
+		tfversion, err = GetInstalledVersion(defaultBin)
+		if err != nil {
+			return "", defaultBin
+		}
+		return tfversion, defaultBin
 	}
-	return  "" , defaultBin
+	return "", defaultBin
+}
+
+func GetInstalledVersion(bin string) (string, error) {
+	cmd := exec.Command(bin, "-v")
+	var outb, errb bytes.Buffer
+	cmd.Stdout = &outb
+	cmd.Stderr = &errb
+	err := cmd.Run()
+	if err != nil {
+		return "", err
+	}
+	version := trimFirstRune(strings.Split(outb.String(), " ")[1])
+	return strings.Split(strings.TrimSpace(version), "\n")[0], nil
 }
 
 func findConfig() (bool, string, string) {
@@ -73,7 +95,7 @@ func checkToml(dir string) (bool, string, string) {
 	if _, err := os.Stat(configfile); err == nil {
 		fmt.Printf("Reading configuration from %s\n", configfile)
 
-		path :=  ""                        //takes the default bin (defaultBin) if user does not specify bin path
+		path := ""                                      //takes the default bin (defaultBin) if user does not specify bin path
 		configfileName := lib.GetFileName(tomlFilename) //get the config file
 		viper.SetConfigType("toml")
 		viper.SetConfigName(configfileName)
@@ -86,7 +108,7 @@ func checkToml(dir string) (bool, string, string) {
 			os.Exit(1) // exit immediately if config file provided but it is unable to read it
 		}
 
-		bin := viper.Get("bin")                  // read custom binary location
+		bin := viper.Get("bin") // read custom binary location
 		path = os.ExpandEnv(bin.(string))
 		tfversion := viper.Get("version") //attempt to get the version if it's provided in the toml
 		return true, tfversion.(string), path
@@ -104,7 +126,7 @@ func checkHomeDirToml() (bool, string, string) {
 }
 
 func checkTFswitchrc(dir string) (bool, string) {
-	rcfile := dir + fmt.Sprintf("/%s", rcFilename)               //settings for .tfswitchrc file in current directory (backward compatible purpose)
+	rcfile := dir + fmt.Sprintf("/%s", rcFilename) //settings for .tfswitchrc file in current directory (backward compatible purpose)
 	if _, err := os.Stat(rcfile); err == nil {
 		fmt.Printf("Reading required terraform version %s \n", rcFilename)
 		fileContents, err := ioutil.ReadFile(rcfile)
@@ -120,9 +142,9 @@ func checkTFswitchrc(dir string) (bool, string) {
 }
 
 func checkTFvfile(dir string) (bool, string) {
-	tfvfile := dir + fmt.Sprintf("/%s", tfvFilename)     //settings for .terraform-version file in current directory (tfenv compatible)
+	tfvfile := dir + fmt.Sprintf("/%s", tfvFilename) //settings for .terraform-version file in current directory (tfenv compatible)
 
-	if _, err := os.Stat(tfvfile); err == nil  { //if there is a .terraform-version file, and no command line arguments
+	if _, err := os.Stat(tfvfile); err == nil { //if there is a .terraform-version file, and no command line arguments
 		fmt.Printf("Reading required terraform version %s \n", tfvFilename)
 
 		fileContents, err := ioutil.ReadFile(tfvfile)
@@ -137,8 +159,8 @@ func checkTFvfile(dir string) (bool, string) {
 	return false, ""
 }
 
-func checkTFVAR(dir string)  (bool, string) {
-	if module, _ := tfconfig.LoadModule(dir); len(module.RequiredCore) >= 1  { //if there is a version.tf file, and no commmand line arguments
+func checkTFVAR(dir string) (bool, string) {
+	if module, _ := tfconfig.LoadModule(dir); len(module.RequiredCore) >= 1 { //if there is a version.tf file, and no commmand line arguments
 		tfversion := ""
 		tfconstraint := module.RequiredCore[0]        //we skip duplicated definitions and use only first one
 		listAll := true                               //set list all true - all versions including beta and rc will be displayed
@@ -166,4 +188,13 @@ func checkTFVAR(dir string)  (bool, string) {
 		}
 	}
 	return false, ""
+}
+
+func trimFirstRune(s string) string {
+	for i := range s {
+		if i > 0 {
+			return s[i:]
+		}
+	}
+	return ""
 }

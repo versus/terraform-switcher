@@ -22,7 +22,7 @@ import (
 
 const (
 	defaultPath = "/usr/local/bin/terraform" //default bin installation dir
-	version     = "terraform-switcher 0.11.2\n\n"
+	version     = "terraform-switcher 0.12.6\n\n"
 )
 
 //var version string
@@ -44,7 +44,7 @@ func main() {
 	getopt.Parse()
 	args := getopt.Args()
 
-	if len(args) > 1 || *helpFlag{
+	if len(args) > 1 || *helpFlag {
 		cmd.UsageMessage()
 	}
 
@@ -62,6 +62,13 @@ func main() {
 
 	if *customBinPathFlag != "" {
 		path = *customBinPathFlag
+		if tfversion == "" {
+			v, err := cmd.GetInstalledVersion(*customBinPathFlag)
+			if err != nil {
+				tfversion = ""
+			}
+			tfversion = v
+		}
 	}
 
 	if path == "" {
@@ -74,11 +81,10 @@ func main() {
 	}
 
 	//fmt.Println("tfversion=", tfversion)
-	//fmt.Println("path=",path)
-
+	//fmt.Println("path=", path)
 
 	if *removeFlag {
-		if len(args) == 1{
+		if len(args) == 1 {
 			cmd.RemoveSelectVersion(args[0], path)
 			os.Exit(0)
 		} else {
@@ -89,6 +95,8 @@ func main() {
 	if *initFlag {
 		if len(args) == 1 {
 			cmd.InitConfigVersion(args[0], path, createSymlink)
+		} else if tfversion != "" {
+			cmd.InitConfigVersion(tfversion, path, createSymlink)
 		} else {
 			if *latestVersionFlag {
 				cmd.InitConfigLatestVersion(path, createSymlink)
