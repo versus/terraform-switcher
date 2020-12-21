@@ -1,0 +1,36 @@
+{
+  "name": "@versusdev/terraform-switcher",
+  "version": "0.12.6",
+  "description": "The `tfswitch` command line tool lets you switch between different versions of terraform",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "postinstall": "go-npm install",
+    "preuninstall": "go-npm uninstall"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/versus/terraform-switcher.git"
+  },
+  "keywords": [
+    "terraform",
+    "cli",
+    "automation"
+  ],
+  "author": "Valentyn Nastenko",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/versus/terraform-switcher/issues"
+  },
+  "homepage": "https://github.com/versus/terraform-switcher#readme",
+  "dependencies": {
+    "go-npm": "^0.1.9"
+  },
+  "goBinary": {
+    "name": "tfswitch",
+    "path": "/usr/local/bin",
+    "url": "https://github.com/versus/terraform-switcher/releases/download/{{version}}/terraform-switcher_{{version}}_{{platform}}_{{arch}}.tar.gz"
+  }
+}
