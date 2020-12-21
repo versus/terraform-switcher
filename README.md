@@ -48,7 +48,7 @@ snap install multipass
 
 snapcraft
 
-snap install terraform-switcher_*.snap --devmode --dangerous
+snap install tfswitch_*.snap --devmode --dangerous
 
 tfswitch -v
 
