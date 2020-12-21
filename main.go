@@ -22,7 +22,7 @@ import (
 
 const (
 	defaultPath = "/usr/local/bin/terraform" //default bin installation dir
-	version     = "terraform-switcher 0.20.1\n\n"
+	version     = "terraform-switcher 0.20.2\n\n"
 )
 
 //var version string
