@@ -24,6 +24,12 @@ Installation for MacOS/Linux is the easiest with Homebrew. [If you do not have h
 brew install versus/tap/tfswitch
 ```
 
+### NPM
+
+```sh
+npm i @versusdev/terraform-switcher
+```
+
 ### Linux
 
 Installation for other linux operation systems.
