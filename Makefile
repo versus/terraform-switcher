@@ -39,8 +39,12 @@ test: $(EXE)
 docs:
 	cd docs; bundle install --path vendor/bundler; bundle exec jekyll build -c _config.yml; cd ..
 
+.PHONY: snap
+snap:
+	(multipass stop snapcraft-tfswitch && multipass delete snapcraft-tfswitch && multipass purge && rm -f tfswitch_*.snap) || true  && snapcraft
+
 .PHONY: gorelease
 gorelease:
-	rm -f ./dist/$(EXE) ./dist/$(EXE)-*-*-*
+	rm -rf ./dist/
 	goreleaser
 
