@@ -20,7 +20,7 @@ $(EXE): go.mod *.go lib/*.go
 	go build -v -ldflags "-X main.version=$(VER)" -o ./dist/$@ $(PKG)
 
 .PHONY: release
-release: $(EXE) darwin linux
+release: $(EXE) clean gorelease alpine snap
 
 .PHONY: darwin linux
 darwin linux:
@@ -28,12 +28,7 @@ darwin linux:
 
 .PHONY: clean
 clean:
-	rm -f ./dist/$(EXE) ./dist/$(EXE)-*-*-*
-
-.PHONY: test
-test: $(EXE)
-	mv ./dist/$(EXE) build
-	go test -v ./...
+	rm -rf ./dist/
 
 .PHONY: docs
 docs:
@@ -42,6 +37,10 @@ docs:
 .PHONY: snap
 snap:
 	(multipass stop snapcraft-tfswitch && multipass delete snapcraft-tfswitch && multipass purge && rm -f tfswitch_*.snap) || true  && snapcraft
+
+.PHONY: alpine
+alpine:
+	cd ./alpine && bash ./build.sh
 
 .PHONY: gorelease
 gorelease:
