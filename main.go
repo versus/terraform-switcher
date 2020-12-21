@@ -22,7 +22,7 @@ import (
 
 const (
 	defaultPath = "/usr/local/bin/terraform" //default bin installation dir
-	version     = "terraform-switcher 0.12.6\n\n"
+	version     = "terraform-switcher 0.20.1\n\n"
 )
 
 //var version string
@@ -57,7 +57,14 @@ func main() {
 
 	envPath := os.Getenv("TFSWITCH_PATH")
 	if envPath != "" {
+		fmt.Println("TFSWITCH_PATH detected")
 		path = envPath
+	}
+
+	envVersion := os.Getenv("TFSWITCH_VERSION")
+	if envVersion != "" {
+		fmt.Println("TFSWITCH_VERSION  detected")
+		tfversion = envVersion
 	}
 
 	if *customBinPathFlag != "" {

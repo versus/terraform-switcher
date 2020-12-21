@@ -133,6 +133,11 @@ Alternatively, you can generate .tfswitch.toml in current directory just use `tf
 1. Create a `TFSWITCH_PATH` environment variable with your custom path to install terraform Ex: `export  TFSWITCH_PATH=/Users/versus/bin/terraform`
 2. Run the command `tfswitch` 
 
+### Use environment variable TFSWITCH_VERSION
+
+1. Create a `TFSWITCH_PATH` environment variable with your custom path to install terraform Ex: `export  TFSWITCH_VERSION=0.13.5`
+2. Run the command `tfswitch` 
+
 #### *Instead of a `.tfswitchrc` file, a `.terraform-version` file may be used for compatibility with [`tfenv`](https://github.com/tfutils/tfenv#terraform-version-file) and other tools which use it*
 
 **Automatically switch with bash**
