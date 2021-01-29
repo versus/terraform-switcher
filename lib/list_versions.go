@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -16,24 +17,12 @@ type tfVersionList struct {
 
 //GetTFList :  Get the list of available terraform version given the hashicorp url
 func GetTFList(hashiURL string, listAll bool) ([]string, error) {
-
-	/* Get list of terraform versions from hashicorp releases */
-	resp, errURL := http.Get(hashiURL)
-	if errURL != nil {
-		log.Printf("Error getting url: %v", errURL)
-		return nil, errURL
+	
+	result, err := GetTFURLBody(hashiURL)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return nil, err
 	}
-	defer resp.Body.Close()
-
-	body, errBody := ioutil.ReadAll(resp.Body)
-	if errBody != nil {
-		log.Printf("Error reading body: %v", errBody)
-		return nil, errBody
-	}
-
-	bodyString := string(body)
-	result := strings.Split(bodyString, "\n")
-
 	var tfVersionList tfVersionList
 
 	for i := range result {
@@ -67,6 +56,54 @@ func GetTFLatest(hashiURL string) (string, error) {
 	}
 
 	return  resp[0], nil
+}
+
+//GetTFLatestImplicit :  Get the latest implicit terraform version given the hashicorp url
+func GetTFLatestImplicit(hashiURL string, preRelease bool, version string) (string, error) {
+
+	result, error := GetTFURLBody(hashiURL)
+	if error != nil {
+		return "", error
+	}
+	var semver string
+	if preRelease == true {
+		// Getting versions from body; should return match /X.X.X-@/ where X is a number,@ is a word character between a-z or A-Z
+		semver = fmt.Sprintf(`\/(%s{1}\.\d+\-[a-zA-z]+\d*)?\/`, version)
+	} else if preRelease == false {
+		semver = fmt.Sprintf(`\/(%s{1}\.\d+)\/`, version)
+	}
+	r, _ := regexp.Compile(semver)
+	for i := range result {
+		if r.MatchString(result[i]) {
+			str := r.FindString(result[i])
+			trimstr := strings.Trim(str, "/") //remove "/" from /X.X.X/
+			return trimstr, nil
+		}
+	}
+
+	return "", nil
+}
+
+//GetTFURLBody : Get list of terraform versions from hashicorp releases
+func GetTFURLBody(hashiURL string) ([]string, error) {
+
+	resp, errURL := http.Get(hashiURL)
+	if errURL != nil {
+		log.Printf("Error getting url: %v", errURL)
+		return nil, errURL
+	}
+	defer resp.Body.Close()
+
+	body, errBody := ioutil.ReadAll(resp.Body)
+	if errBody != nil {
+		log.Printf("Error reading body: %v", errBody)
+		return nil, errBody
+	}
+
+	bodyString := string(body)
+	result := strings.Split(bodyString, "\n")
+
+	return result, nil
 }
 
 //VersionExist : check if requested version exist
@@ -122,6 +159,19 @@ func ValidVersionFormat(version string) bool {
 	// Follow https://semver.org/spec/v1.0.0-beta.html
 	// Check regular expression at https://rubular.com/r/ju3PxbaSBALpJB
 	semverRegex := regexp.MustCompile(`^(\d+\.\d+\.\d+)(-[a-zA-z]+\d*)?$`)
+
+	return semverRegex.MatchString(version)
+}
+
+// ValidMinorVersionFormat : returns valid MINOR version format
+/* For example: 0.1 = valid
+// For example: a.1.2 = invalid
+// For example: 0.1.2 = invalid
+*/
+func ValidMinorVersionFormat(version string) bool {
+
+	// Getting versions from body; should return match /X.X./ where X is a number
+	semverRegex := regexp.MustCompile(`^(\d+\.\d+)$`)
 
 	return semverRegex.MatchString(version)
 }

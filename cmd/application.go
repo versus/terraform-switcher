@@ -58,9 +58,31 @@ func InstallLatest(path string, createSymlink bool)  {
 	}
 }
 
+func InstallPreReleaseVersion(tfversion string, path string, createSymlink bool)  {
+	if lib.ValidMinorVersionFormat(tfversion){
+		ver, err := lib.GetTFLatestImplicit(hashiURL, true, tfversion)
+		if err != nil {
+			fmt.Println("Error get implict version: ", err)
+			os.Exit(1)
+		}
+		lib.Install(string(ver), path, createSymlink)
+	}else {
+		fmt.Println(invalidVersion)
+		os.Exit(1)
+	}
+}
+
+
 func InstallSelectVersion(tfversion string, path string, createSymlink bool)  {
 		if lib.ValidVersionFormat(tfversion) { //check if version is correct
 			lib.Install(string(tfversion), path, createSymlink)
+		} else if lib.ValidMinorVersionFormat(tfversion){
+			ver, err := lib.GetTFLatestImplicit(hashiURL, false, tfversion)
+			if err != nil {
+				fmt.Println("Error get implict version: ", err)
+				os.Exit(1)
+			}
+			lib.Install(string(ver), path, createSymlink)
 		} else {
 			fmt.Println(invalidVersion)
 			os.Exit(1)

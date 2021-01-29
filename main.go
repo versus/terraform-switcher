@@ -22,7 +22,7 @@ import (
 
 const (
 	defaultPath = "/usr/local/bin/terraform" //default bin installation dir
-	version     = "terraform-switcher 0.20.2\n\n"
+	version     = "terraform-switcher 0.21.1\n\n"
 )
 
 //var version string
@@ -35,8 +35,9 @@ func main() {
 	listAllFlag := getopt.BoolLong("list-all", 'l', "List all versions of terraform - including beta and rc")
 	programVersionFlag := getopt.BoolLong("version", 'v', "Displays the version of tfswitch")
 	latestVersionFlag := getopt.BoolLong("latest", 'u', "Switch to the latest terraform version")
+	preVersionFlag := getopt.BoolLong("pre", 'p', "Latest pre-release implicit version. Ex: tfswitch --latest-pre 0.13 downloads 0.13.0-rc1 (latest)\"")
 	helpFlag := getopt.BoolLong("help", 'h', "Displays help message")
-	initFlag := getopt.BoolLong("init", 'i', "Generate .tfswitch.toml in current directory with current version terraform")
+	initFlag := getopt.BoolLong("save", 's', "Generate .tfswitch.toml in current directory with current version terraform")
 	removeFlag := getopt.BoolLong("delete", 'd', "Remove terraform version from filesystem")
 	noSymlinkFlag := getopt.BoolLong("no-symlink", 'n', "Skip symlink creation")
 	noPromptFlag := getopt.BoolLong("quiet", 'q', "Only switch if version is detected or specified")
@@ -126,6 +127,10 @@ func main() {
 
 	if *latestVersionFlag {
 		cmd.InstallLatest(path, createSymlink)
+	}
+
+	if *preVersionFlag {
+		cmd.InstallPreReleaseVersion(args[0], path, createSymlink)
 	}
 
 	if len(args) == 0 {

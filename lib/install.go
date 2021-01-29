@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/user"
+	"regexp"
 	"runtime"
 	"sort"
 	"strings"
@@ -245,12 +246,17 @@ func GetInstalledVersions() ([]string, error) {
 		if file.Name() == "RECENT" {
 			continue
 		}
+		r, err := regexp.MatchString(".zip", file.Name())
+		if err == nil && r {
+			continue
+		}
 		versions = append(versions, strings.Trim(file.Name(), "terraform_"))
 	}
 	var str  sort.StringSlice = versions
 	sort.Sort(sort.Reverse(str[:]))
 	return str, nil
 }
+
 
 // GetRecentVersions : get recent version from file
 func GetRecentVersions() ([]string, error) {
