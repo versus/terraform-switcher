@@ -35,7 +35,7 @@ func main() {
 	listAllFlag := getopt.BoolLong("list-all", 'l', "List all versions of terraform - including beta and rc")
 	programVersionFlag := getopt.BoolLong("version", 'v', "Displays the version of tfswitch")
 	latestVersionFlag := getopt.BoolLong("latest", 'u', "Switch to the latest terraform version")
-	preVersionFlag := getopt.BoolLong("pre", 'p', "Latest pre-release implicit version. Ex: tfswitch --latest-pre 0.13 downloads 0.13.0-rc1 (latest)\"")
+	//preVersionFlag := getopt.BoolLong("pre", 'p', "Latest pre-release implicit version. Ex: tfswitch --pre 0.13 downloads 0.13.0-rc1 (latest)\"")
 	helpFlag := getopt.BoolLong("help", 'h', "Displays help message")
 	initFlag := getopt.BoolLong("save", 's', "Generate .tfswitch.toml in current directory with current version terraform")
 	removeFlag := getopt.BoolLong("delete", 'd', "Remove terraform version from filesystem")
@@ -49,7 +49,7 @@ func main() {
 		cmd.UsageMessage()
 	}
 
-	fmt.Printf(version)
+	fmt.Println(version)
 	if *programVersionFlag {
 		os.Exit(0)
 	}
@@ -72,10 +72,9 @@ func main() {
 		path = *customBinPathFlag
 		if tfversion == "" {
 			v, err := cmd.GetInstalledVersion(*customBinPathFlag)
-			if err != nil {
-				tfversion = ""
+			if err == nil {
+				tfversion = v
 			}
-			tfversion = v
 		}
 	}
 
@@ -128,11 +127,11 @@ func main() {
 	if *latestVersionFlag {
 		cmd.InstallLatest(path, createSymlink)
 	}
-
-	if *preVersionFlag {
-		cmd.InstallPreReleaseVersion(args[0], path, createSymlink)
-	}
-
+	/*
+		if *preVersionFlag {
+			cmd.InstallPreReleaseVersion(args[0], path, createSymlink)
+		}
+	*/
 	if len(args) == 0 {
 		if tfversion != "" && path != "" {
 			cmd.InstallSelectVersion(tfversion, path, createSymlink)
