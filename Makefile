@@ -38,6 +38,9 @@ docs:
 snap:
 	(multipass stop snapcraft-tfswitch && multipass delete snapcraft-tfswitch && multipass purge && rm -f ./dist/tfswitch_*.snap) || true  && snapcraft && mv tfswitch*.snap ./dist
 
+.PHONY: snap-stop
+snap-stop:
+	(multipass stop snapcraft-tfswitch && multipass delete snapcraft-tfswitch && multipass purge ) || true
 .PHONY: alpine
 alpine:
 	cd ./alpine && bash ./build.sh
