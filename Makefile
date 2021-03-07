@@ -1,6 +1,6 @@
 EXE  := tfswitch
 PKG  := github.com/versus/terraform-switcher
-VER := 0.21.5
+VER := 0.21.6
 PATH := build:$(PATH)
 GOOS ?= $(shell go env GOOS)
 GOARCH ?= $(shell go env GOARCH)
@@ -46,5 +46,9 @@ alpine:
 gorelease:
 	rm -rf ./dist/
 	goreleaser
+
+.PHONY: tag
+tag:
+	git tag -a $(VER) -m "New release"
 
 
