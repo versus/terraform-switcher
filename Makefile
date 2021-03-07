@@ -20,7 +20,7 @@ $(EXE): go.mod *.go lib/*.go
 	go build -v -ldflags "-X main.version=$(VER)" -o ./dist/$@ $(PKG)
 
 .PHONY: release
-release: $(EXE) clean tag gorelease alpine snap
+release: $(EXE) clean gorelease alpine 
 
 .PHONY: darwin linux
 darwin linux:
