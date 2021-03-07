@@ -36,7 +36,7 @@ docs:
 
 .PHONY: snap
 snap:
-	(multipass stop snapcraft-tfswitch && multipass delete snapcraft-tfswitch && multipass purge && rm -f ./dist/tfswitch_*.snap) || true  && snapcraft && mv tfswitch*.snap ./dist
+	(mkdir ./dist && multipass stop snapcraft-tfswitch && multipass delete snapcraft-tfswitch && multipass purge && rm -f ./dist/tfswitch_*.snap) || true  && snapcraft && mv tfswitch*.snap ./dist
 
 .PHONY: snap-stop
 snap-stop:
