@@ -13,6 +13,6 @@ require (
 	github.com/manifoldco/promptui v0.2.2-0.20180308161052-c0c0d3afc6a0
 	github.com/mattn/go-colorable v0.1.2 // indirect
 	github.com/pborman/getopt v0.0.0-20170112200414-7148bc3a4c30
-	github.com/schollz/progressbar/v3 v3.7.3
+	github.com/schollz/progressbar/v3 v3.7.5
 	github.com/spf13/viper v1.7.1
 )
